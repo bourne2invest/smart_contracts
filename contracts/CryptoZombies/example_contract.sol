@@ -11,12 +11,6 @@ contract Example {
     // create string state var greeting
     string greeting = "Hello world!";
 
-    // create Person struct with age and name properties:
-    struct Person {
-        uint256 age;
-        string name;
-    }
-
     //// add example arrays
     // array with fixed length of 2 elements:
     uint256[2] fixedArray;
@@ -25,9 +19,14 @@ contract Example {
     // a dynamic array with no fixed size and can keep growing:
     uint256[] dynamicArray;
 
+    // create Person struct with age and name properties:
+    struct Person {
+        uint256 age;
+        string name;
+    }
+
     // create an array of structs, named people:
     // Person[] people; // dynamic array, can keep adding to it
-
     // useful for storing structured data in our contract (like a database)
 
     // can declare array as public:
@@ -45,4 +44,21 @@ contract Example {
         // 2. by reference, which eferences the original variable so if the fn modifys this argument, then the original variable gets modified.
         // Note: sol convention is to prefix fn param names w/ _ to distinguish them from global vars
     }
+
+    // create new Person's and add them to our array
+    Person satoshi = Person(172, "Satoshi");
+
+    // add this person to array
+    people.push(satoshi);
+
+    // this is equivalent to:
+    people.push(Person(172, "Satoshi));
+
+    // elements are added in order:
+    uint[] numbers;
+    numbers.push(5);
+    numbers.push(10);
+    numbers.push(15);
+    // numbers is now equal to [5,10,15] 
+
 }
