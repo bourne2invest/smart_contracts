@@ -2,6 +2,10 @@ pragma solidity >=0.5.0; // solidity version
 
 // create contract:
 contract ZombieFactory {
+    // make event to let front-end know each time new
+    // zombie was made, so app can display it:
+    event NewZombie(uint256 zombieId, string name, uint256 dna);
+
     uint256 dnaDigits = 16; // zombie DNA is determined by 16-digit number
     uint256 dnaModulus = 10**dnaDigits; // to ensure zombie DNA is only 16 chars
 
@@ -19,7 +23,11 @@ contract ZombieFactory {
     // pass the 1st param by value using memory keyword
     function _createZombie(string memory _name, uint256 _dna) private {
         // use args to create new Zombie, adding it to zombies array
-        zombies.push(Zombie(_name, _dna));
+        // zombies.push(Zombie(_name, _dna));
+        // get idx of new zombie in zombies array:
+        uint256 id = zombies.push(Zombie(_name, _dna)) - 1;
+        // fire NewZombie event once new zombie has been added to array:
+        emit NewZombie(id, _name, _dna);
     }
 
     // write hlpr fn which gets random DNA num from str:
