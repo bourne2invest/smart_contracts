@@ -32,6 +32,17 @@ contract Example {
 
     // can declare array as public:
     Person[] public people; // solidity automatically creates getter method
+
     // other contracts can now read from, but not write to this array
     // this is a useful pattern for storing public data in our contract
+
+    function eatHamburgers(string memory _name, uint256 _amount) public {
+        // an empty, public function
+        // takes 2 params, a string and uint
+        // var _name will be stored in memory
+        // Note: in solidity fns can be invoked in 2 ways:
+        // 1. by value, i.e: a copy of the param is passed, so that our fn can modify the value without changing the original
+        // 2. by reference, which eferences the original variable so if the fn modifys this argument, then the original variable gets modified.
+        // Note: sol convention is to prefix fn param names w/ _ to distinguish them from global vars
+    }
 }
