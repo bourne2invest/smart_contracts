@@ -61,4 +61,17 @@ contract Example {
     numbers.push(15);
     // numbers is now equal to [5,10,15] 
 
+
+    // solidity fns are public by default, i.e:
+    // anyone or any other contract can call your
+    // contract's fn and execute its code.
+
+    // declare private fn:
+    function _addToArray(uint _number) private {
+        numbers.push(_number);
+        // Note: convention to prefix private fn names with _
+    }
+    // now only other functions within our contract
+    // will be able to call this number and add to the 
+    // numbers array.
 }
