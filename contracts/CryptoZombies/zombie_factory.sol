@@ -14,7 +14,7 @@ contract ZombieFactory {
     // create public array of Zombie structs & store our zombie army in our app:
     Zombie[] public zombies; // dynamic can keep growing; can show to other apps
 
-    // create public fn named createZombie
+    // create private fn named createZombie
     // accept 2 params: _name::str and _dna::uint
     // pass the 1st param by value using memory keyword
     function _createZombie(string memory _name, uint256 _dna) private {
@@ -32,5 +32,14 @@ contract ZombieFactory {
         uint256 rand = uint256(keccak256(abi.encodePacked(_str)));
         // takes hash of packed _str and casts as uint
         return rand % dnaModulus; // so DNA is only 16 digits long
+    }
+
+    // create public fn that takes zombie name as input,
+    // and uses this to create a zombie with random DNA:
+    function createRandomZombie(string memory _name) public {
+        // run gen random dna fn:
+        uint256 randDna = _generateRandomDna(_name);
+        // make the zombie:
+        _createZombie(_name, randDna);
     }
 }
