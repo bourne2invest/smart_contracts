@@ -74,4 +74,34 @@ contract Example {
     // now only other functions within our contract
     // will be able to call this number and add to the 
     // numbers array.
+
+    // return a value from a fn:
+    string greeting = "It smells like updog";
+    function sayHello() public view returns (string memory) {
+        // declaring as view fn means it only views the data but does not modify it
+        return greeting;
+    }
+
+    // fns can also be pure, meaning they don't access ANY data in the app, e.g:
+    function _multiply(uint a, uint b) private pure returns (uint) {
+        return a * b;
+    }
+
+    // Ethereum has the hash fn keccak256 built in
+    // hash fns maps an input into a random 256-bit hexadeciaml number
+    // slight changes in inputs cause large changes in the hash
+    // keccak256 expects a single param of type bytes, i.e: we have to "pack" ant params before calling it, e.g:
+
+    //6e91ec6b618bb462a4a6ee5aa2cb0e9cf30f7a052bb467b0ba58b8748c00d2e5
+    keccak256(abi.encodePacked("aaaab"));
+    //b1f078126895a1424524de5321b339ab00408010b7cf0e6ed451514981e58aa9
+    keccak256(abi.encodePacked("aaaac"));
+
+    // example of converting between data types:
+    uint8 a = 5;
+    uint b = 6;
+    // will throw error b/c a * b returns uint, not uint8
+    uint8 c = a * b;
+    // we have to typecast:
+    uint8 c = a * uint8(b);
 }
