@@ -17,5 +17,8 @@ contract ZombieFactory {
     // create public fn named createZombie
     // accept 2 params: _name::str and _dna::uint
     // pass the 1st param by value using memory keyword
-    function createZombie(string memory _name, uint256 _dna) public {}
+    function createZombie(string memory _name, uint256 _dna) public {
+        // use args to create new Zombie, adding it to zombies array
+        zombies.push(Zombie(_name, _dna));
+    }
 }
