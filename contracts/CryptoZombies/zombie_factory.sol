@@ -27,5 +27,10 @@ contract ZombieFactory {
         private
         view
         returns (uint256)
-    {}
+    {
+        // generate pseudo-random number (hexadecimal):
+        uint256 rand = uint256(keccak256(abi.encodePacked(_str)));
+        // takes hash of packed _str and casts as uint
+        return rand % dnaModulus; // so DNA is only 16 digits long
+    }
 }
