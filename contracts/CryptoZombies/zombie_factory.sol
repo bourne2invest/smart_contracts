@@ -21,4 +21,11 @@ contract ZombieFactory {
         // use args to create new Zombie, adding it to zombies array
         zombies.push(Zombie(_name, _dna));
     }
+
+    // write hlpr fn which gets random DNA num from str:
+    function _generateRandomDna(string memory _str)
+        private
+        view
+        returns (uint256)
+    {}
 }
