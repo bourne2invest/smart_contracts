@@ -13,4 +13,9 @@ contract ZombieFactory {
 
     // create public array of Zombie structs & store our zombie army in our app:
     Zombie[] public zombies; // dynamic can keep growing; can show to other apps
+
+    // create public fn named createZombie
+    // accept 2 params: _name::str and _dna::uint
+    // pass the 1st param by value using memory keyword
+    function createZombie(string memory _name, uint256 _dna) public {}
 }
