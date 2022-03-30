@@ -125,4 +125,14 @@ contract Example {
         // do something with the result
     })
 
+    // Mappings:
+    // mappings are another way of storing data in Solidity
+    mapping (address => uint) public accountBalance;
+    // financial app might sore uint that holds user's balance
+    mapping (uint => string) userIdToName;
+    // could store/lookup usernames based on a userId
+
+    // think of mappings like Python dicts
+    // they are key-value data structure
+
 }
