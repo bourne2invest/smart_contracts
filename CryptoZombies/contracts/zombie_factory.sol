@@ -32,6 +32,10 @@ contract ZombieFactory {
         // zombies.push(Zombie(_name, _dna));
         // get idx of new zombie in zombies array:
         uint256 id = zombies.push(Zombie(_name, _dna)) - 1;
+        // store new zombie ownership:
+        zombieToOwner[id] = msg.sender;
+        // update owner zombie count
+        ownerZombieCount[msg.sender]++;
         // fire NewZombie event once new zombie has been added to array:
         emit NewZombie(id, _name, _dna);
     }
