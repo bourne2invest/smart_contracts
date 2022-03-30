@@ -18,6 +18,12 @@ contract ZombieFactory {
     // create public array of Zombie structs & store our zombie army in our app:
     Zombie[] public zombies; // dynamic can keep growing; can show to other apps
 
+    // use mappings to store zombie ownership:
+    // 1. track address that owns a zombie,
+    // 2. how many zombies an owner has.
+    mapping(uint256 => address) public zombieToOwner;
+    mapping(address => uint256) ownerZombieCount;
+
     // create private fn named createZombie
     // accept 2 params: _name::str and _dna::uint
     // pass the 1st param by value using memory keyword
