@@ -167,4 +167,15 @@ contract Example {
     //Moral: using msg.sender gives us security of the 
     // blockchain the only way to moidy someone else's 
     // data would be to steal their private key.
+
+
+    // require: makes it so the function will throw and error and stop executing if some condition is not true
+    function sayHiToVitalik(string memory _name) public returns (string memory) {
+        //compare if _name equals "Vitalik". Throws an error and exits if not True.
+        //note: solidity doesn't have native string comparison, so
+        //use keccack256 hashes to check if two strings are equal.
+        require(keccack256(abi.encodePacked(_name)) == keccack256(abi.encodePacked("Vitalik")));
+        //if True, proceed with the function:
+        return "Hi!";
+    }
 }
