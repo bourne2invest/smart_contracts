@@ -205,8 +205,45 @@ contract Example {
     import "./someothercontract.sol";
 
     contract newContract is SomeOtherContract {
-        
+
     }
     ```
+
+    // in solidity we can store variables in memory or in storage.
+    //storage means the variables are stored permanently on the blockchain.
+    //memory variables are temporary, and are erased between external function calls to your contract. 
+    //like hard disk vs RAM on a computer.
+
+    //we will need to exert care when dealing with structs and arrays within functions, for e.g:
+    contract SandwichFactory {
+        struct Sandwich {
+            string name;
+            string status;
+        }
+    }
+
+    Sandwich[] sandwiches;
+
+    function eatSandwich(uint _index) public {
+        // Sandwich mySandwich = sandwiches[_index];
+        // Solidity would give us an errory stating to explicity declare `storage` or `memory` if we tried the above.
+
+        //instead, declare with the `storage` keyword:
+        Sandwich storage mySandwich = sandwiches[_index];
+        // `mySandwich` is a pointer to `sandwiches[_index]` in storage
+        mySandwich.status = "Eaten!";
+        // this will permanently change `sandwiches[_index]`
+
+        //for just a copy, use `memory`:
+        Sandwich memory anotherSandwich = sandwiches[_index + 1];
+        //so `anotherSanwich` will just be a copy of the data in memory
+        anotherSandwich.status = "Eaten!";
+        //modifies the temporary variable and have no effect on `sandwiches[_index +1]`, but can do:
+        sandwiches[_index + 1] = anotherSandwich;
+        //to copy the changes back into blockchain storage.
+    }
+
+    // solidity compiler will give warnings to let us know if we should be using the `storage` or `memory` keywords.
+    //moral: there are cases where we'll need to explicity declare `storage` or `memory`--usually when dealing with `structs` and `arrays` within functions.
 
 }
