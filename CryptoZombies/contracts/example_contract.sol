@@ -200,4 +200,13 @@ contract Example {
     // catchphrase() and anotherCatchphrase(), as well as any
     //other public functions defined in Doge.
 
+    //when you have multiple files and one to import one into another, use import:
+    ```
+    import "./someothercontract.sol";
+
+    contract newContract is SomeOtherContract {
+        
+    }
+    ```
+
 }
