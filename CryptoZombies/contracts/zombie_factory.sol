@@ -55,6 +55,10 @@ contract ZombieFactory {
     // create public fn that takes zombie name as input,
     // and uses this to create a zombie with random DNA:
     function createRandomZombie(string memory _name) public {
+        // prevent user from creating unlimited zombies. only allow
+        // user to create their first
+        //zombie. Throws error otherwise.
+        require(ownerZombieCount[msg.sender] == 0);
         // run gen random dna fn:
         uint256 randDna = _generateRandomDna(_name);
         // make the zombie:
