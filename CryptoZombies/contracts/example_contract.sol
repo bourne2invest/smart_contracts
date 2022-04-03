@@ -296,4 +296,22 @@ contract Example {
     }
     //now our contract knows what the other contracts fns look like, how to call them, and what sort of response to expect.
 
+
+    //now that we have defined NumberInterface, we can use it in a contract:
+    contract MyContract {
+        //address of FavoriteNumber contract on Ethereum
+        address NumberInterfaceAddress = 0xab38...
+        // `numberContract` is pointing to the other contract:
+        NumberInterface numberContract = NumberInterface(NumberInterfaceAddress);
+        
+        function someFunction() public {
+            //now we can call `getNum` from that contract:
+            uint num = numberContract.getNum(msg.sender);
+            //...and do something with `num` below:
+        }
+    }
+
+    // in this way, our contract can interact with any other contract on Ethereum blockchain,
+    //so long as thoe fns are exposed as `public` or `external`.
+
 }
