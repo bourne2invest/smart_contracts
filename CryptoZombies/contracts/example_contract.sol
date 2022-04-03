@@ -246,4 +246,30 @@ contract Example {
     // solidity compiler will give warnings to let us know if we should be using the `storage` or `memory` keywords.
     //moral: there are cases where we'll need to explicity declare `storage` or `memory`--usually when dealing with `structs` and `arrays` within functions.
 
+    //if we were to compile zombie_feeding.sol, we would encounter an error.
+    //we called _createZombie which is a private function in ZombieFactory.
+    //i.e: no contracts inheriting from ZombieFactory can access it.
+
+    //in addition to public and private functions, solidity also has internal and external functions.
+    //internal is the same as private, except it's also accessible to contracts that inherit from this contract.
+    //external is public, except these functions can ONLY be called outside the contract (can't be called by other functions inside that contract)
+
+    contract Sandwich {
+        uint private sandwichesEaten = 0;
+
+        function eat() internal {
+            sandwichesEaten++;
+        }
+    }
+
+    contract BLT is Sandwich {
+        uint private baconSandwichesEaten = 0;
+
+        function eatWithBacon() public returns (string memory) {
+            baconSandwichesEaten++;
+            //can call this b/c it's internal:
+            eat();
+        }
+    }
+
 }
