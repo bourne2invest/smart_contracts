@@ -19,6 +19,7 @@ contract KittyInterface {
             uint256 sireId,
             uint256 generation,
             uint256 genes
+            //note:recall uint is alias for uint256
         );
 }
 
@@ -40,5 +41,15 @@ contract ZombieFeeding is ZombieFactory {
         uint256 newDna = (myZombie.dna + _targetDna) / 2;
         // create new zombie with new dna
         _createZombie("NoName", newDna);
+    }
+
+    // make fn feedOnKitty, gets kitty genes from the contract:
+    function feedOnKitty(uint256 _zombieId, uint256 _kittyId) public {
+        // declare uint kittyDna
+        uint256 kittyDna;
+        // get genes from getKitty and store as kittyDna:
+        (, , , , , , , , , kittyDna) = kittyContract.getKitty(_kittyId);
+        //call feedAndMultiply fn w/ zombie and kitty:
+        feedAndMultiply(_zombieId, kittyDna);
     }
 }
