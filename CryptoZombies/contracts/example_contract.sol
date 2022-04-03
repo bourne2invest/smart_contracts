@@ -314,4 +314,26 @@ contract Example {
     // in this way, our contract can interact with any other contract on Ethereum blockchain,
     //so long as thoe fns are exposed as `public` or `external`.
 
+    //handling multiple return values:
+    function multipleReturns() internal returns (uint a, uint b, uint c) {
+        return (1, 2, 3);
+    }
+
+    function processMultipleReturns() external {
+        uint a;
+        uint b;
+        uint c;
+        //how to do multiple assignment:
+        (a, b, c) = multipleReturns();
+        //very similar to Python..
+    }
+
+    //or if we only care about one value:
+    function getLastReturnValue() external {
+        uint c;
+        //leave other fields blank:
+        (,,c) = multipleReturns();
+        //again, v similar to Python!
+    }
+
 }
