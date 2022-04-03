@@ -1,4 +1,5 @@
-pragma solidity >=0.5.0; // solidity version
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0; //>=0.5.0; // solidity version
 
 // create contract:
 contract ZombieFactory {
@@ -27,7 +28,7 @@ contract ZombieFactory {
     // create private fn named createZombie
     // accept 2 params: _name::str and _dna::uint
     // pass the 1st param by value using memory keyword
-    function _createZombie(string memory _name, uint256 _dna) private {
+    function _createZombie(string memory _name, uint256 _dna) internal {
         // use args to create new Zombie, adding it to zombies array
         // zombies.push(Zombie(_name, _dna));
         // get idx of new zombie in zombies array:
