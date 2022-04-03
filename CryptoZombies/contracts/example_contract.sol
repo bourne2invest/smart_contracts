@@ -336,4 +336,13 @@ contract Example {
         //again, v similar to Python!
     }
 
+
+    //in Solidity, if-statements are similar to python/js:
+    function eatBLT(string memory sandwich) public {
+        //remember to compare keccack256 hash of strings to check equality of strings:
+        if (keccack256(abi.encodePacked(sandwich)) == keccack256(abi.encodePacked("BLT))) {
+            eat();
+        }
+    }
+
 }
