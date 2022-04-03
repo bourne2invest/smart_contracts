@@ -272,4 +272,28 @@ contract Example {
         }
     }
 
+    // interacting with other contracts
+    //in order for our contract to interact with another contract we don't own, we need to define an interface.
+    //suppose we had the following contract:
+    contract LuckyNumber {
+        mapping(address => uint) numbers;
+
+        function setNum(uint _num) public {
+            numbers[msg.sender] = _num;
+        }
+
+        function getNum(address _myAddress) public view returns (uint) {
+            return numbers[_myAddress];
+        }
+    }
+
+    //now suppose we had an external contract that wanted to read data in this contract using the getNum function.
+    //to do this, we'd have to define an interface of the LuckyNumber contract:
+    contract NumberInterface {
+        //declare fns we want to interact with (don't mention other fns or state vars)
+        function getNum(address _myAddress) public view returns (uint); //dont define fn body
+        //this is how the compiler knows its an interface
+    }
+    //now our contract knows what the other contracts fns look like, how to call them, and what sort of response to expect.
+
 }
