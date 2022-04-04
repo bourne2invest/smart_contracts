@@ -125,4 +125,224 @@ contract Example {
         // do something with the result
     })
 
+    // Mappings:
+    // mappings are another way of storing data in Solidity
+    // think of mappings like Python dicts
+    // they are key-value data structure
+    mapping (address => uint) public accountBalance;
+    // financial app might sore uint that holds user's balance
+    mapping (uint => string) userIdToName;
+    // could store/lookup usernames based on a userId
+
+
+    // msg.sender:
+    // Solidity has global vars available to all fns.
+    // `msg.sender` points to the `address` of the
+    // person or smart contract who called the current fn.
+    //
+    // In Solidity, fn executions always start w/ am
+    // external caller. Contracts will just sit on the
+    // blockchain until someone calls one of its fns.
+    // So there will always be a `msg.sender`.
+    mapping (address => uint) favoriteNumber;
+
+    function setMyNumber(uint _myNumber) public {
+        // Update our `favoriteNumber` mapping to store
+        // `_myNumber` under `msg.sender`
+        favoriteNumber[msg.sender] = _myNumber;
+        // syntax is just like arrays
+    }
+
+    function whatIsMyNumber() public view returns (uint) {
+        // retrieve the value stored in the sender's address
+        // will be `0` if sender hasn't called `setMyNumber`
+        return favoriteNumber[msg.sender];
+    }
+
+    //anyone could call `setMyNumber` and store a uint in
+    //our contract, which would be tied to their address.
+    //Then, once `whatIsMyNumber` is called, they would
+    //be returned the uint they stored
+
+    //Moral: using msg.sender gives us security of the 
+    // blockchain the only way to moidy someone else's 
+    // data would be to steal their private key.
+
+
+    // require: makes it so the function will throw and error and stop executing if some condition is not true
+    function sayHiToVitalik(string memory _name) public returns (string memory) {
+        //compare if _name equals "Vitalik". Throws an error and exits if not True.
+        //note: solidity doesn't have native string comparison, so
+        //use keccack256 hashes to check if two strings are equal.
+        require(keccack256(abi.encodePacked(_name)) == keccack256(abi.encodePacked("Vitalik")));
+        //if True, proceed with the function:
+        return "Hi!";
+    }
+
+
+    // inheritance.
+    // rather than make one really long contract, it can make sense to split
+    // code logic across multiple contracts to keep code organized, for e.g:
+    contract Doge{
+        function catchphrase() public returns (string memory) {
+            return "So Wow CryptoDoge";
+        }
+    }
+
+    contract BabyDoge is Doge {
+        function anotherCatchphrase() public returns (string memory) {
+            return "Such Moon BabyDoge";
+        }
+    }
+
+    // BabyDoge inherits from Doge, i.e:
+    // if we were to compile and deploy BabyDoge, it would have access to both
+    // catchphrase() and anotherCatchphrase(), as well as any
+    //other public functions defined in Doge.
+
+    //when you have multiple files and one to import one into another, use import:
+    ```
+    import "./someothercontract.sol";
+
+    contract newContract is SomeOtherContract {
+
+    }
+    ```
+
+    // in solidity we can store variables in memory or in storage.
+    //storage means the variables are stored permanently on the blockchain.
+    //memory variables are temporary, and are erased between external function calls to your contract. 
+    //like hard disk vs RAM on a computer.
+
+    //we will need to exert care when dealing with structs and arrays within functions, for e.g:
+    contract SandwichFactory {
+        struct Sandwich {
+            string name;
+            string status;
+        }
+    }
+
+    Sandwich[] sandwiches;
+
+    function eatSandwich(uint _index) public {
+        // Sandwich mySandwich = sandwiches[_index];
+        // Solidity would give us an errory stating to explicity declare `storage` or `memory` if we tried the above.
+
+        //instead, declare with the `storage` keyword:
+        Sandwich storage mySandwich = sandwiches[_index];
+        // `mySandwich` is a pointer to `sandwiches[_index]` in storage
+        mySandwich.status = "Eaten!";
+        // this will permanently change `sandwiches[_index]`
+
+        //for just a copy, use `memory`:
+        Sandwich memory anotherSandwich = sandwiches[_index + 1];
+        //so `anotherSanwich` will just be a copy of the data in memory
+        anotherSandwich.status = "Eaten!";
+        //modifies the temporary variable and have no effect on `sandwiches[_index +1]`, but can do:
+        sandwiches[_index + 1] = anotherSandwich;
+        //to copy the changes back into blockchain storage.
+    }
+
+    // solidity compiler will give warnings to let us know if we should be using the `storage` or `memory` keywords.
+    //moral: there are cases where we'll need to explicity declare `storage` or `memory`--usually when dealing with `structs` and `arrays` within functions.
+
+    //if we were to compile zombie_feeding.sol, we would encounter an error.
+    //we called _createZombie which is a private function in ZombieFactory.
+    //i.e: no contracts inheriting from ZombieFactory can access it.
+
+    //in addition to public and private functions, solidity also has internal and external functions.
+    //internal is the same as private, except it's also accessible to contracts that inherit from this contract.
+    //external is public, except these functions can ONLY be called outside the contract (can't be called by other functions inside that contract)
+
+    contract Sandwich {
+        uint private sandwichesEaten = 0;
+
+        function eat() internal {
+            sandwichesEaten++;
+        }
+    }
+
+    contract BLT is Sandwich {
+        uint private baconSandwichesEaten = 0;
+
+        function eatWithBacon() public returns (string memory) {
+            baconSandwichesEaten++;
+            //can call this b/c it's internal:
+            eat();
+        }
+    }
+
+    // interacting with other contracts
+    //in order for our contract to interact with another contract we don't own, we need to define an interface.
+    //suppose we had the following contract:
+    contract LuckyNumber {
+        mapping(address => uint) numbers;
+
+        function setNum(uint _num) public {
+            numbers[msg.sender] = _num;
+        }
+
+        function getNum(address _myAddress) public view returns (uint) {
+            return numbers[_myAddress];
+        }
+    }
+
+    //now suppose we had an external contract that wanted to read data in this contract using the getNum function.
+    //to do this, we'd have to define an interface of the LuckyNumber contract:
+    contract NumberInterface {
+        //declare fns we want to interact with (don't mention other fns or state vars)
+        function getNum(address _myAddress) public view returns (uint); //dont define fn body
+        //this is how the compiler knows its an interface
+    }
+    //now our contract knows what the other contracts fns look like, how to call them, and what sort of response to expect.
+
+
+    //now that we have defined NumberInterface, we can use it in a contract:
+    contract MyContract {
+        //address of FavoriteNumber contract on Ethereum
+        address NumberInterfaceAddress = 0xab38...
+        // `numberContract` is pointing to the other contract:
+        NumberInterface numberContract = NumberInterface(NumberInterfaceAddress);
+        
+        function someFunction() public {
+            //now we can call `getNum` from that contract:
+            uint num = numberContract.getNum(msg.sender);
+            //...and do something with `num` below:
+        }
+    }
+
+    // in this way, our contract can interact with any other contract on Ethereum blockchain,
+    //so long as thoe fns are exposed as `public` or `external`.
+
+    //handling multiple return values:
+    function multipleReturns() internal returns (uint a, uint b, uint c) {
+        return (1, 2, 3);
+    }
+
+    function processMultipleReturns() external {
+        uint a;
+        uint b;
+        uint c;
+        //how to do multiple assignment:
+        (a, b, c) = multipleReturns();
+        //very similar to Python..
+    }
+
+    //or if we only care about one value:
+    function getLastReturnValue() external {
+        uint c;
+        //leave other fields blank:
+        (,,c) = multipleReturns();
+        //again, v similar to Python!
+    }
+
+
+    //in Solidity, if-statements are similar to python/js:
+    function eatBLT(string memory sandwich) public {
+        //remember to compare keccack256 hash of strings to check equality of strings:
+        if (keccack256(abi.encodePacked(sandwich)) == keccack256(abi.encodePacked("BLT))) {
+            eat();
+        }
+    }
+
 }
