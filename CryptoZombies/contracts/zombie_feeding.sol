@@ -29,7 +29,11 @@ contract ZombieFeeding is ZombieFactory {
     //create KittyInterface & initialize with ckAddress:
     KittyInterface kittyContract = KittyInterface(ckAddress);
 
-    function feedAndMultiply(uint256 _zombieId, uint256 _targetDna) public {
+    function feedAndMultiply(
+        uint256 _zombieId,
+        uint256 _targetDna,
+        string memory _species
+    ) public {
         //only let zombie owner feed:
         require(msg.sender == zombieToOwner[_zombieId]);
         // declare local Zombie (storage pointer)
@@ -39,6 +43,17 @@ contract ZombieFeeding is ZombieFactory {
         _targetDna = _targetDna % dnaModulus;
         //set newDna as average of Zombie and target dna
         uint256 newDna = (myZombie.dna + _targetDna) / 2;
+        //modify new Dna if zombies is made from a kitty
+        if (
+            keccak256(abi.encodePacked(_species)) ==
+            keccak256(abi.encodePacked("kitty"))
+        ) {
+            //enforce cat-zombie dna ends in 99 (for 9 lives):
+            newDna = newDna - (newDna % 100) + 99;
+            //e.g: newDna = 334455, then newDna % 100 is 55
+            // then newDna - newDna % 100 is 334400.
+            // finally add 99 so last 2 digits of dna ends in 99.
+        }
         // create new zombie with new dna
         _createZombie("NoName", newDna);
     }
@@ -50,6 +65,6 @@ contract ZombieFeeding is ZombieFactory {
         // get genes from getKitty and store as kittyDna:
         (, , , , , , , , , kittyDna) = kittyContract.getKitty(_kittyId);
         //call feedAndMultiply fn w/ zombie and kitty:
-        feedAndMultiply(_zombieId, kittyDna);
+        feedAndMultiply(_zombieId, kittyDna, "kitty");
     }
 }
