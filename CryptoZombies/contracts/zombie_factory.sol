@@ -11,6 +11,8 @@ contract ZombieFactory is Ownable {
 
     uint256 dnaDigits = 16; // zombie DNA is determined by 16-digit number
     uint256 dnaModulus = 10**dnaDigits; // to ensure zombie DNA is only 16 chars
+    // define cooldownTime:
+    uint256 cooldownTime = 1 days;
 
     // create Zombie struct with name and dna properties:
     struct Zombie {
@@ -36,7 +38,9 @@ contract ZombieFactory is Ownable {
         // use args to create new Zombie, adding it to zombies array
         // zombies.push(Zombie(_name, _dna));
         // get idx of new zombie in zombies array:
-        uint256 id = zombies.push(Zombie(_name, _dna)) - 1;
+        uint256 id = zombies.push(
+            Zombie(_name, _dna, 1, uint32(now + cooldownTime))
+        ) - 1;
         // store new zombie ownership:
         zombieToOwner[id] = msg.sender;
         // update owner zombie count
