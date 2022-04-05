@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0; //>=0.5.0; // solidity version
 
+import "./ownable.sol";
+
 // create contract:
-contract ZombieFactory {
+contract ZombieFactory is Ownable {
     // make event to let front-end know each time new
     // zombie was made, so app can display it:
     event NewZombie(uint256 zombieId, string name, uint256 dna);
