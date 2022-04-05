@@ -16,6 +16,8 @@ contract ZombieFactory is Ownable {
     struct Zombie {
         string name;
         uint256 dna;
+        uint32 level; // pack together
+        uint32 readyTime; //smallest dtype possible(32<<256)
     }
 
     // create public array of Zombie structs & store our zombie army in our app:
