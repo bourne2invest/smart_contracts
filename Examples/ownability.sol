@@ -50,6 +50,8 @@ contract Ownable {
     // note: function modifiers like above, are half-functions used to modify other functions
     // this usually checks some requirements prior to execution
     // in this case, `onlyOwner` can be used to limit access so *only* the *owner* of the contract can run this function.
+    //while there are other ways to use modifiers, the most
+    //common application is for require checks before executing a fn.
 
     /**
      * @return true if `msg.sender` is the owner of the contract.
@@ -68,6 +70,11 @@ contract Ownable {
         emit OwnershipTransferred(_owner, address(0));
         _owner = address(0);
     }
+
+    //note: the onlyOwner modifier. When calling this fn,
+    //the code in onlyOwner executes first. Then, when it
+    //hits the `_;` statement in `onlyOwner`, it goes back
+    //and executes the code in renounceOwnership fn above.
 
     /**
      * @dev Allows the current owner to transfer control of the contract to a newOwner.
